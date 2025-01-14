@@ -1,0 +1,21 @@
+{
+  "name": "uttam-kheti-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node ./dist/server.js",
+    "format": "prettier --write ."
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "prettier": "^3.0.0"
+  },
+  "dependencies": {
+    "cloudinary": "^2.5.1",
+    "express": "^4.21.2"
+  }
+}
