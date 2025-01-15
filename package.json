@@ -4,7 +4,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node ./dist/server.js",
+    "start": "node -r dotenv/config --experimental-json-modules ./dist/server.js",
+    "dev": "nodemon -r dotenv/config --experimental-json-modules ./dist/server.js",
     "format": "prettier --write ."
   },
   "author": "",
@@ -12,7 +13,8 @@
   "description": "",
   "devDependencies": {
     "@types/express": "^5.0.0",
-    "prettier": "^3.0.0"
+    "prettier": "^3.0.0",
+    "nodemon": "^3.1.7"
   },
   "dependencies": {
     "cloudinary": "^2.5.1",

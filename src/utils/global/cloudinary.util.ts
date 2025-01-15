@@ -1,8 +1,8 @@
-import { v2 as cloudinary } from "cloudinary";
+import { v2 as cloudinary, UploadApiResponse } from "cloudinary";
 import fs from "fs";
-import { STATUS_CODES } from "../constants/statusCodes.js";
-import { INTERNAL_SERVER_ERROR } from "../constants/message.js";
-import ApiError from "../utils/ApiError.util.js";
+import { STATUS_CODES } from "../../constants/global/statusCodes.js";
+import { INTERNAL_SERVER_ERROR } from "../../constants/global/message.js";
+import ApiError from "../global/ApiError.util.js";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -10,7 +10,7 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const uploadOnCloudinary = async (localFilePath: string) => {
+const uploadOnCloudinary = async (localFilePath: string): Promise<UploadApiResponse | null> => {
   if (!localFilePath) {
     return null;
   }
@@ -30,7 +30,7 @@ const uploadOnCloudinary = async (localFilePath: string) => {
   }
 };
 
-export const deleteImageFromCloudinary = async (url: string) => {
+export const deleteImageFromCloudinary = async (url: string): Promise<void> => {
   try {
     const publicId = (url.split("/").pop() || "").split(".")[0] || "";
     await cloudinary.uploader.destroy(publicId, { invalidate: true });
