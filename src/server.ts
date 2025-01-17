@@ -1,7 +1,10 @@
 import app from "./app.js";
 import dotenv from "dotenv";
+import dbConnect from "./config/database.config.js";
+import { CONNECTION_ERROR } from "./constants/global/message.js";
 
 dotenv.config();
+dbConnect();
 
 const PORT = process.env.PORT;
 const HOST = process.env.HOST;

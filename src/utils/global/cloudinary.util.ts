@@ -1,16 +1,23 @@
 import { v2 as cloudinary, UploadApiResponse } from "cloudinary";
 import fs from "fs";
+import {
+  CLOUDINARY_CLOUD_NAME,
+  CLOUDINARY_API_KEY,
+  CLOUDINARY_API_SECRET,
+} from "../../config/env.config.js";
 import { STATUS_CODES } from "../../constants/global/statusCodes.js";
 import { INTERNAL_SERVER_ERROR } from "../../constants/global/message.js";
 import ApiError from "../global/ApiError.util.js";
 
 cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
+  cloud_name: CLOUDINARY_CLOUD_NAME,
+  api_key: CLOUDINARY_API_KEY,
+  api_secret: CLOUDINARY_API_SECRET,
 });
 
-const uploadOnCloudinary = async (localFilePath: string): Promise<UploadApiResponse | null> => {
+const uploadOnCloudinary = async (
+  localFilePath: string
+): Promise<UploadApiResponse | null> => {
   if (!localFilePath) {
     return null;
   }
