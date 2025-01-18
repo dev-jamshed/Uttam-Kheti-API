@@ -1,12 +1,8 @@
 import { v2 as cloudinary, UploadApiResponse } from "cloudinary";
 import fs from "fs";
-import {
-  CLOUDINARY_CLOUD_NAME,
-  CLOUDINARY_API_KEY,
-  CLOUDINARY_API_SECRET,
-} from "../../config/env.config.js";
-import { STATUS_CODES } from "../../constants/global/statusCodes.js";
-import { INTERNAL_SERVER_ERROR } from "../../constants/global/message.js";
+import { CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET } from "../../config/env.config.js";
+import { STATUS_CODES } from "../../constants/global/statusCodes.constants.js";
+import { INTERNAL_SERVER_ERROR } from "../../constants/global/message.constants.js";
 import ApiError from "../global/ApiError.util.js";
 
 cloudinary.config({
@@ -15,9 +11,7 @@ cloudinary.config({
   api_secret: CLOUDINARY_API_SECRET,
 });
 
-const uploadOnCloudinary = async (
-  localFilePath: string
-): Promise<UploadApiResponse | null> => {
+const uploadOnCloudinary = async (localFilePath: string): Promise<UploadApiResponse | null> => {
   if (!localFilePath) {
     return null;
   }
@@ -30,10 +24,7 @@ const uploadOnCloudinary = async (
   } catch (error) {
     fs.unlinkSync(localFilePath);
     console.error("Error on Uploading File in Cloudinary ❌", error);
-    throw new ApiError(
-      STATUS_CODES.INTERNAL_SERVER_ERROR,
-      INTERNAL_SERVER_ERROR
-    );
+    throw new ApiError(STATUS_CODES.INTERNAL_SERVER_ERROR, INTERNAL_SERVER_ERROR);
   }
 };
 

@@ -7,6 +7,7 @@ export const CONNECTION_ESTABLISHED = "Connection established";
 export const CONNECTION_ERROR = "Error while connecting";
 export const LOGIN_SUCCESS = "Logged in successfully";
 export const LOGOUT_SUCCESS = "Logged out successfully";
+export const PRODUCTION = "production";
 export const INVALID_CREDENTIALS = "Invalid email or password";
 export const CREATE_SUCCESS = (item: string) => `${item} created successfully`;
 export const UPDATE_SUCCESS = (item: string) => `${item} updated successfully`;
