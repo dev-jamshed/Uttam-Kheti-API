@@ -5,7 +5,6 @@ import { STATUS_CODES } from "../../constants/global/statusCodes.constants.js";
 
 import { UNAUTHORIZED_ERROR } from "../../constants/global/message.constants.js";
 export const generateToken = (payload: any) => {
-  console.log(payload)
   if (!JWT_SECRET || !JWT_EXPIRES_IN) {
     throw new ApiError(STATUS_CODES.INTERNAL_SERVER_ERROR, UNAUTHORIZED_ERROR);
   }
