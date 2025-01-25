@@ -1,10 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import ApiError from "../../utils/global/ApiError.util.js";
 import { STATUS_CODES } from "../../constants/global/statusCodes.constants.js";
+import { any, array } from "zod";
 
 const errorHandler = (err: ApiError | Error, req: Request, res: Response, next: NextFunction) => {
-  console.error(err);
-
   let statusCode = STATUS_CODES.INTERNAL_SERVER_ERROR;
   let message = "Internal Server Error";
   let errors: any[] = [];
@@ -15,9 +14,7 @@ const errorHandler = (err: ApiError | Error, req: Request, res: Response, next: 
     errors = err.errors;
   } else if (err instanceof SyntaxError && "body" in err) {
     statusCode = STATUS_CODES.BAD_REQUEST;
-    
   } else {
-    
     errors = [{ message: err.message }];
   }
 
@@ -25,8 +22,9 @@ const errorHandler = (err: ApiError | Error, req: Request, res: Response, next: 
     success: false,
     statusCode,
     message,
-    errors,
-    stack: process.env.NODE_ENV === "development" ? err.stack : undefined,
+    errors: errors.length ? errors : undefined,
+
+    // stack: process.env.NODE_ENV === "development" ? err.stack : undefined,
   });
 };
 

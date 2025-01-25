@@ -1,4 +1,4 @@
-import { model, Schema, Document } from "mongoose";
+import mongoose, { Schema, Document, Model } from "mongoose";
 
 export interface IOtpVerification extends Document {
   userId: Schema.Types.ObjectId;
@@ -6,6 +6,15 @@ export interface IOtpVerification extends Document {
   otp: string;
   expiresAt: Date;
   createdAt: Date;
+}
+
+interface OtpVerificationModel extends Model<IOtpVerification> {
+  createOTP(
+    userId: Schema.Types.ObjectId,
+    userType: string,
+    otp: string,
+    expiryMinutes: number
+  ): Promise<IOtpVerification>;
 }
 
 const otpSchema = new Schema<IOtpVerification>(
@@ -34,10 +43,29 @@ const otpSchema = new Schema<IOtpVerification>(
       default: Date.now,
     },
   },
-  { 
+  {
     timestamps: true,
-    collection: 'otpVerifications' 
+    collection: "otpVerifications",
   }
 );
 
-export const OtpVerification = model<IOtpVerification>("OtpVerification", otpSchema);
+// Static method to create OTP
+otpSchema.statics.createOTP = async function (
+  userId: Schema.Types.ObjectId,
+  userType: string,
+  otp: string,
+  expiryMinutes: number
+) {
+  const expiresAt = new Date(Date.now() + expiryMinutes * 60 * 1000);
+  return this.create({
+    userId,
+    userType,
+    otp,
+    expiresAt,
+  });
+};
+
+export const OtpVerification: OtpVerificationModel = mongoose.model<IOtpVerification, OtpVerificationModel>(
+  "OtpVerification",
+  otpSchema
+);

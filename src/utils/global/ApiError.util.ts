@@ -1,5 +1,4 @@
 class ApiError extends Error {
-  
   statusCode: number;
   data: object | null;
   success: boolean;

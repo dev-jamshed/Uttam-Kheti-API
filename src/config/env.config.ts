@@ -11,6 +11,7 @@ export const NODE_ENV: string | undefined = process.env.NODE_ENV;
 export const SALTROUNDS: number = parseInt(process.env.SALTROUNDS || "10", 10);
 export const JWT_SECRET: string | undefined = process.env.JWT_SECRET;
 export const JWT_EXPIRES_IN: string | undefined = process.env.JWT_EXPIRES_IN;
+export const JWT_TEMP_TOKEN_EXPIRES_IN: string | undefined = process.env.JWT_TEMP_TOKEN_EXPIRES_IN;
 export const OTP_EXPIRES_IN: string | undefined = process.env.OTP_EXPIRES_IN;
 
 export const SMTP_USERNAME: string | undefined = process.env.SMTP_USERNAME;

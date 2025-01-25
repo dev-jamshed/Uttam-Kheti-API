@@ -5,13 +5,14 @@ import ApiError from "../../../utils/global/ApiError.util.js";
 import { STATUS_CODES } from "../../../constants/global/statusCodes.constants.js";
 import sendResponse from "../../../utils/global/responseHandler.util.js";
 import { sendEmail } from "../../../utils/global/email.util.js";
+import { EMAIL_ALREADY_EXISTS, USER_CREATED_SUCCESS } from "../../../constants/global/message.constants.js";
 
 const registerController = asyncHandler(async (req: Request, res: Response) => {
   const { name, email, phone, password } = req.body;
   const userExist = await Admin.findOne({ email });
-  
+
   if (userExist) {
-    throw new ApiError(STATUS_CODES.CONFLICT, "User already exists");
+    throw new ApiError(STATUS_CODES.CONFLICT, EMAIL_ALREADY_EXISTS);
   }
   const user = await Admin.create({
     name,
@@ -32,7 +33,7 @@ const registerController = asyncHandler(async (req: Request, res: Response) => {
     context: { name },
   });
 
-  sendResponse(res, STATUS_CODES.CREATED, userWithoutPassword, "User Registered Successfully");
+  sendResponse(res, STATUS_CODES.CREATED, USER_CREATED_SUCCESS, userWithoutPassword);
 });
 
 export default registerController;

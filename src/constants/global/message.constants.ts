@@ -38,7 +38,7 @@ export const PASSWORD_LENGTH_ERROR = "Password must be at least 6 characters";
 export const CONFIRM_PASSWORD_ERROR = "Passwords do not match";
 
 // User Related Messages
-export const USER_NOT_FOUND = "User not found";
+export const USER_NOT_FOUND = "No account found with this email address. Please check your email or register.";
 export const USER_ALREADY_EXISTS = "User already exists";
 export const USER_CREATED_SUCCESS = "User created successfully";
 export const USER_UPDATED_SUCCESS = "User updated successfully";
@@ -87,3 +87,5 @@ export const DATABASE_ERROR = "Database operation failed";
 export const REQUEST_SUCCESS = "Request processed successfully";
 export const OPERATION_SUCCESS = "Operation completed successfully";
 export const DATA_FETCHED_SUCCESS = "Data fetched successfully";
+
+export const PASSWORD_CHANGED_SUCCESSFULLY = "Password changed successfully";

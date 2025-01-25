@@ -1,6 +1,11 @@
 import bcrypt from "bcrypt";
 import mongoose, { Schema, Document, Model } from "mongoose";
-import { SALTROUNDS } from "../../config/env.config.js";
+import jwt from "jsonwebtoken";
+import { SALTROUNDS, JWT_SECRET, JWT_EXPIRES_IN } from "../../config/env.config.js";
+
+if (!JWT_SECRET) {
+  throw new Error("JWT_SECRET is not defined");
+}
 
 interface IAdmin extends Document {
   name: string;
@@ -9,6 +14,7 @@ interface IAdmin extends Document {
   phone: string;
   createdAt: Date;
   updatedAt: Date;
+  generateAuthToken(): string;
 }
 
 const AdminSchema: Schema<IAdmin> = new Schema(
@@ -51,6 +57,13 @@ AdminSchema.pre<IAdmin>("save", async function (next) {
     next(error as Error);
   }
 });
+
+AdminSchema.methods.generateAuthToken = function (): string {
+  const token = jwt.sign({ _id: this._id, email: this.email }, JWT_SECRET as string, {
+    expiresIn: JWT_EXPIRES_IN,
+  });
+  return token;
+};
 
 const Admin: Model<IAdmin> = mongoose.model<IAdmin>("Admin", AdminSchema);
 
