@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import Admin from "../../../models/admin/admin.model.js";
+import Customer from "../../../models/customer/customer.model.js";
 import asyncHandler from "../../../utils/global/asyncHandler.util.js";
 import ApiError from "../../../utils/global/ApiError.util.js";
 import sendResponse from "../../../utils/global/responseHandler.util.js";
@@ -12,7 +12,10 @@ import { JWT_EXPIRES_IN } from "../../../config/env.config.js";
 
 const loginController = asyncHandler(async (req: Request, res: Response) => {
   const { email, password } = req.body;
-  const user = await Admin.findOne({ email }).select("_id name email password");
+
+
+  // Find customer
+  const user = await Customer.findOne({ email }).select("_id name email password");
 
   if (!user) {
     throw new ApiError(STATUS_CODES.UNAUTHORIZED, INVALID_CREDENTIALS);

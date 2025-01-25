@@ -1,6 +1,6 @@
 import z from "zod";
 
 export const changePasswordValidation = z.object({
-  password: z.string().min(8),
+  tempToken: z.string(),
   newPassword: z.string().min(8),
 });

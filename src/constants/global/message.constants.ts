@@ -33,12 +33,13 @@ export const OTP_EMAIL_SEND_ERROR = "Failed to send OTP email";
 export const VALIDATION_ERROR = "Validation Error";
 export const EMAIL_REQUIRED = "Email is required";
 export const INVALID_EMAIL_FORMAT = "Invalid email format";
+export const INVALID_EMAIL = "Invalid email";
 export const PASSWORD_REQUIRED = "Password is required";
 export const PASSWORD_LENGTH_ERROR = "Password must be at least 6 characters";
 export const CONFIRM_PASSWORD_ERROR = "Passwords do not match";
 
 // User Related Messages
-export const USER_NOT_FOUND = "No account found with this email address. Please check your email or register.";
+export const USER_NOT_FOUND = "No account found with this email address.";
 export const USER_ALREADY_EXISTS = "User already exists";
 export const USER_CREATED_SUCCESS = "User created successfully";
 export const USER_UPDATED_SUCCESS = "User updated successfully";
