@@ -15,7 +15,6 @@ import { JWT_TEMP_TOKEN_EXPIRES_IN } from "../../../config/env.config.js";
 
 export const verifyOtp = asyncHandler(async (req: Request, res: Response) => {
   const { email, otp } = req.body;
-  console.log("email", email);
   // Find customer user
   const user = await Customer.findOne({ email });
   if (!user) {

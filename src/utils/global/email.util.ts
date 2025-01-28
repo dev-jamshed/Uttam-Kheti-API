@@ -27,7 +27,7 @@ interface EmailOptions {
 
 export const sendEmail = async (options: EmailOptions): Promise<void> => {
   const templatePath = path.join(__dirname, "../../templates", `${options.template}.html`);
-  console.log(templatePath);
+
   let html = fs.readFileSync(templatePath, "utf8");
   // Replace placeholders with actual values
   for (const [key, value] of Object.entries(options.context)) {
