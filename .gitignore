@@ -21,3 +21,4 @@ build/
 
 # Miscellaneous
 .DS_Store
+.env

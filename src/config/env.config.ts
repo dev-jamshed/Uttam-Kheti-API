@@ -14,7 +14,14 @@ export const JWT_EXPIRES_IN: string | undefined = process.env.JWT_EXPIRES_IN;
 export const JWT_TEMP_TOKEN_EXPIRES_IN: string | undefined = process.env.JWT_TEMP_TOKEN_EXPIRES_IN;
 export const OTP_EXPIRES_IN: string | undefined = process.env.OTP_EXPIRES_IN;
 
+// SMTP
 export const SMTP_USERNAME: string | undefined = process.env.SMTP_USERNAME;
 export const SMTP_PASSWORD: string | undefined = process.env.SMTP_PASSWORD;
 export const SMTP_HOST: string | undefined = process.env.SMTP_HOST;
 export const SMTP_PORT: number = parseInt(process.env.SMTP_PORT || "587", 10);
+
+// AWS S3
+export const AWS_ACCESS_KEY_ID: string | undefined = process.env.AWS_ACCESS_KEY_ID;
+export const AWS_SECRET_ACCESS_KEY: string | undefined = process.env.AWS_SECRET_ACCESS_KEY;
+export const AWS_REGION: string | undefined = process.env.AWS_REGION;
+export const S3_BUCKET_NAME: string | undefined = process.env.S3_BUCKET_NAME;
