@@ -14,10 +14,12 @@ export const PRODUCTION = "production";
 export const INVALID_CREDENTIALS = "Invalid email or password";
 
 // CRUD Operation Messages
-export const CREATE_SUCCESS = (item: string) => `${item} created successfully`;
-export const UPDATE_SUCCESS = (item: string) => `${item} updated successfully`;
-export const DELETE_SUCCESS = (item: string) => `${item} deleted successfully`;
-export const GET_SUCCESS = (item: string) => `${item} retrieved successfully`;
+export const CREATE_SUCCESS = (entity: string) => `${entity} created successfully`;
+export const UPDATE_SUCCESS = (entity: string) => `${entity} updated successfully`;
+export const DELETE_SUCCESS = (entity: string) => `${entity} deleted successfully`;
+export const GET_SUCCESS = (entity: string) => `${entity} retrieved successfully`;
+export const NOT_FOUND = (entity: string) => `${entity} not found`;
+export const ALREADY_EXISTS = (entity: string) => `${entity} already exists`;
 
 // OTP Related Messages
 export const OTP_SENT_SUCCESS = "OTP has been sent to your email";

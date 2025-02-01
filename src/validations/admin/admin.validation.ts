@@ -1,5 +1,4 @@
 import z from "zod";
-import Admin from "../../models/admin/admin.model.js";
 
 export const adminValidation = z.object({
   name: z.string().min(3),
