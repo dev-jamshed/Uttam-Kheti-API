@@ -21,7 +21,7 @@ export const uploadFileToS3 = async (fileBuffer: Buffer, fileName: string, conte
       Key: params.Key,
     });
     const signedUrl = await getSignedUrl(s3Client, getCommand, { expiresIn: 3600 }); // URL expires in 1 hour
-    return signedUrl; 
+    return signedUrl;
   } catch (error: any) {
     throw new ApiError(STATUS_CODES.INTERNAL_SERVER_ERROR, "File upload failed", error);
   }

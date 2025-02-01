@@ -13,7 +13,6 @@ import { JWT_EXPIRES_IN } from "../../../config/env.config.js";
 const loginController = asyncHandler(async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
-
   // Find customer
   const user = await Customer.findOne({ email }).select("_id name email password");
 
@@ -25,7 +24,7 @@ const loginController = asyncHandler(async (req: Request, res: Response) => {
     throw new ApiError(STATUS_CODES.UNAUTHORIZED, INVALID_CREDENTIALS);
   }
   const { password: _, ...userWithoutPassword } = user.toObject();
-  const token = generateToken({ _id:user._id ,name: user.name }, JWT_EXPIRES_IN as string);
+  const token = generateToken({ _id: user._id, name: user.name }, JWT_EXPIRES_IN as string);
   sendResponse(res, STATUS_CODES.OK, LOGIN_SUCCESS, { user: { ...userWithoutPassword, token } });
 });
 

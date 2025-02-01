@@ -12,7 +12,7 @@ interface CustomRequest extends Request {
 }
 
 export const verifyAdmin = async (req: CustomRequest, res: Response, next: NextFunction) => {
-  if(NODE_ENV === "development") {
+  if (NODE_ENV === "development") {
     return next();
   }
   const token = req.headers.authorization?.split(" ")[1];

@@ -9,7 +9,12 @@ export interface IOtpVerification extends Document {
 }
 
 interface OtpVerificationModel extends Model<IOtpVerification> {
-  createOTP(userId: Schema.Types.ObjectId, userType: string, otp: string, expiryMinutes: number): Promise<IOtpVerification>;
+  createOTP(
+    userId: Schema.Types.ObjectId,
+    userType: string,
+    otp: string,
+    expiryMinutes: number
+  ): Promise<IOtpVerification>;
 }
 
 const otpSchema = new Schema<IOtpVerification>(
@@ -45,14 +50,22 @@ const otpSchema = new Schema<IOtpVerification>(
 );
 
 // Static method to create OTP
-otpSchema.statics.createOTP = async function(userId: Schema.Types.ObjectId, userType: string, otp: string, expiryMinutes: number) {
+otpSchema.statics.createOTP = async function (
+  userId: Schema.Types.ObjectId,
+  userType: string,
+  otp: string,
+  expiryMinutes: number
+) {
   const expiresAt = new Date(Date.now() + expiryMinutes * 60 * 1000);
   return this.create({
     userId,
     userType,
     otp,
-    expiresAt
+    expiresAt,
   });
 };
 
-export const OtpVerification: OtpVerificationModel = mongoose.model<IOtpVerification, OtpVerificationModel>("OtpVerification", otpSchema);
+export const OtpVerification: OtpVerificationModel = mongoose.model<IOtpVerification, OtpVerificationModel>(
+  "OtpVerification",
+  otpSchema
+);

@@ -34,7 +34,7 @@ const registerController = asyncHandler(async (req: Request, res: Response) => {
     context: { name },
   });
 
-  sendResponse(res, STATUS_CODES.CREATED,USER_CREATED_SUCCESS,userWithoutPassword);
+  sendResponse(res, STATUS_CODES.CREATED, USER_CREATED_SUCCESS, userWithoutPassword);
 });
 
 export default registerController;
