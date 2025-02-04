@@ -11,7 +11,7 @@ const errorHandler = (err: ApiError | Error, req: Request, res: Response, next: 
   if (err instanceof ApiError) {
     statusCode = err.statusCode;
     message = err.message;
-    errors = err.errors;
+    errors = err.errors || [];
   } else if (err instanceof SyntaxError && "body" in err) {
     statusCode = STATUS_CODES.BAD_REQUEST;
   } else {

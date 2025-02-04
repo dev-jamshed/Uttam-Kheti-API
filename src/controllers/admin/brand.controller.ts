@@ -18,8 +18,9 @@ import { convert } from "url-slug";
 export const createBrand = asyncHandler(async (req: Request, res: Response) => {
   const { name, description } = req.body;
 
-  // Check if brand with the same name already exists
-  const existingBrand = await Brand.findOne({ name });
+  // Check if brand with the same name or slug already exists
+  const slug = convert(name);
+  const existingBrand = await Brand.findOne({ $or: [{ name }, { slug }] });
   if (existingBrand) {
     throw new ApiError(STATUS_CODES.BAD_REQUEST, ALREADY_EXISTS("Brand"));
   }
@@ -28,7 +29,6 @@ export const createBrand = asyncHandler(async (req: Request, res: Response) => {
   if (req.file) {
     image = await uploadFileToS3(req.file.buffer, req.file.originalname, req.file.mimetype);
   }
-  const slug = convert(name);
   const brand = new Brand({ name, description, image, slug });
   await brand.save();
   sendResponse(res, STATUS_CODES.CREATED, CREATE_SUCCESS("Brand"), brand);
@@ -52,8 +52,9 @@ export const updateBrand = asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
   const { name, description } = req.body;
 
-  // Check if brand with the same name already exists
-  const existingBrand = await Brand.findOne({ name, _id: { $ne: id } });
+  // Check if brand with the same name or slug already exists
+  const slug = convert(name);
+  const existingBrand = await Brand.findOne({ $or: [{ name }, { slug }], _id: { $ne: id } });
   if (existingBrand) {
     throw new ApiError(STATUS_CODES.BAD_REQUEST, ALREADY_EXISTS("Brand"));
   }
@@ -68,7 +69,6 @@ export const updateBrand = asyncHandler(async (req: Request, res: Response) => {
     image = await uploadFileToS3(req.file.buffer, req.file.originalname, req.file.mimetype);
   }
 
-  const slug = convert(name);
   const brand = await Brand.findByIdAndUpdate(id, { name, description, image, slug }, { new: true });
   if (!brand) {
     throw new ApiError(STATUS_CODES.NOT_FOUND, NOT_FOUND("Brand"));

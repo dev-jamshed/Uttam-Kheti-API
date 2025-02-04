@@ -1,15 +1,18 @@
+import { STATUS_CODES } from "../../constants/global/statusCodes.constants.js";
+
+interface ValidationError {
+  message: string;
+  path: string[];
+}
+
 class ApiError extends Error {
   statusCode: number;
-  data: object | null;
-  success: boolean;
-  errors: string[];
+  errors?: ValidationError[];
 
-  constructor(statusCode: number, message: string = "Something went wrong", errors: string[] = [], stack: string = "") {
+  constructor(statusCode: number, message: string = "Something went wrong", errors?: ValidationError[], stack: string = "") {
     super(message);
 
     this.statusCode = statusCode;
-    this.data = null;
-    this.success = false;
     this.errors = errors;
 
     if (stack) {
