@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
 import urlSlug from "url-slug";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
 // Define the interface for the Product document
 interface IProduct extends Document {
@@ -10,56 +10,60 @@ interface IProduct extends Document {
   category: mongoose.Types.ObjectId;
   brand?: mongoose.Types.ObjectId;
   attributes?: {
-    weight: number;
+    attribute: mongoose.Types.ObjectId;
+    value: string;
     price: number;
   }[];
   mainImage: string;
+  image?: string; // Add the image property
+  attributeValues?: any[]; // Add the attributeValues property
 }
 
 // Define the Product schema
-const productSchema: Schema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-  slug: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  description: {
-    type: String,
-  },
-  category: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Category',
-    required: true,
-  },
-  brand: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Brand',
-  },
-  attributes: [
-    {
-      weight: {
-        type: Number,
-      },
-      price: {
-        type: Number,
-      },
+const productSchema: Schema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
     },
-  ],
-  mainImage: {
-    type: String,
-    required: true,
+    slug: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    description: {
+      type: String,
+    },
+    category: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
+      required: true,
+    },
+    brand: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Brand",
+    },
+    mainImage: {
+      type: String,
+      required: false,
+    },
+    price: {
+      type: Number,
+      required: true,
+    },
+    crossPrice: {
+      type: Number,
+      required: false,
+    },
   },
-}, {
-  timestamps: true,
-});
+  {
+    timestamps: true,
+  }
+);
 
 // Pre-save middleware to generate slug
-productSchema.pre<IProduct>('save', async function (next) {
-  if (this.isModified('name') || !this.slug) {
+productSchema.pre<IProduct>("save", async function (next) {
+  if (this.isModified("name") || !this.slug) {
     let slug = urlSlug.convert(this.name);
     const existingProduct = await mongoose.models.Product.findOne({ slug });
     if (existingProduct) {
@@ -71,17 +75,24 @@ productSchema.pre<IProduct>('save', async function (next) {
 });
 
 // Virtual field for product images
-productSchema.virtual('productImages', {
-  ref: 'ProductImage',
-  localField: '_id',
-  foreignField: 'product',
+productSchema.virtual("productImages", {
+  ref: "ProductImage",
+  localField: "_id",
+  foreignField: "product",
+});
+
+// Virtual field for product attribute values
+productSchema.virtual("attributeValues", {
+  ref: "ProductAttributeValue",
+  localField: "_id",
+  foreignField: "product_id",
 });
 
 // Ensure virtual fields are serialized
-productSchema.set('toObject', { virtuals: true });
-productSchema.set('toJSON', { virtuals: true });
+productSchema.set("toObject", { virtuals: true });
+productSchema.set("toJSON", { virtuals: true });
 
 // Define the Product model
-const Product: Model<IProduct> = mongoose.model<IProduct>('Product', productSchema);
+const Product: Model<IProduct> = mongoose.model<IProduct>("Product", productSchema);
 
 export default Product;

@@ -1,5 +1,5 @@
 import express from "express";
-import multer from "multer";
+import multerMiddleware from "../../middlewares/upload/multer.middleware.js";
 import {
   createProduct,
   getProducts,
@@ -10,15 +10,14 @@ import {
 import validate from "../../middlewares/validation/validation.middleware.js";
 import { createProductSchema } from "../../validations/product/create.validation.js";
 import { updateProductSchema } from "../../validations/product/update.validation.js";
+import { verifyAdmin } from "../../middlewares/admin/verifyAdmin.middleware.js";
 
 const router = express.Router();
 
-const upload = multer();
-
-router.post("/", upload.fields([{ name: 'mainImage', maxCount: 1 }, { name: 'additionalImages', maxCount: 10 }]), validate(createProductSchema), createProduct);
+router.post("/",verifyAdmin, multerMiddleware.single("mainImage"), validate(createProductSchema), createProduct);
 router.get("/", getProducts);
 router.get("/:id", getProductById);
-router.put("/:id", upload.fields([{ name: 'mainImage', maxCount: 1 }, { name: 'additionalImages', maxCount: 10 }]), validate(updateProductSchema), updateProduct);
-router.delete("/:id", deleteProduct);
+router.put("/:id",verifyAdmin, multerMiddleware.single("mainImage"), validate(updateProductSchema), updateProduct);
+router.delete("/:id", verifyAdmin,deleteProduct);
 
 export default router;

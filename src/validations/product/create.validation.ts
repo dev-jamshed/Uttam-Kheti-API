@@ -1,12 +1,10 @@
 import { z } from "zod";
 
 export const createProductSchema = z.object({
-  name: z.string().nonempty(),
+  name: z.string().nonempty("Name is required"),
   description: z.string().optional(),
-  category: z.string().nonempty(),
+  category: z.string().nonempty("Category is required"),
   brand: z.string().optional(),
-  attributes: z.array(z.object({
-    weight: z.number().positive(),
-    price: z.number().positive(),
-  })).optional(),
+  price: z.number().positive("Price must be a positive number"),
+  crossPrice: z.number().positive("Cross Price must be a positive number").optional(),
 });

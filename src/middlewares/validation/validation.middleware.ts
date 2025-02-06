@@ -1,7 +1,7 @@
 import ApiError from "../../utils/global/ApiError.util.js";
 import { PARAM, PARAM_AND_BODY } from "../../constants/global/app.constants.js";
 import { STATUS_CODES } from "../../constants/global/statusCodes.constants.js";
-import { Schema } from "zod";
+import { Schema, ZodSchema } from "zod";
 import { Response, Request, NextFunction } from "express";
 
 const convertStringToBoolean = (value: any) => {
@@ -10,20 +10,24 @@ const convertStringToBoolean = (value: any) => {
   return value;
 };
 
+const convertBooleans = (obj: any) => {
+  for (const key in obj) {
+    if (typeof obj[key] === "string") {
+      obj[key] = convertStringToBoolean(obj[key]);
+    } else if (typeof obj[key] === "object" && obj[key] !== null) {
+      convertBooleans(obj[key]);
+    }
+  }
+};
+
 const validate =
-  (schema: Schema, type?: string, parse?: string[]) => (req: Request, res: Response, next: NextFunction) => {
+  (schema: ZodSchema, type?: string, parse?: string[]) => (req: Request, res: Response, next: NextFunction) => {
     try {
       if (parse) {
         parse.forEach((key) => (req.body[key] = JSON.parse(req.body[key])));
       }
 
-      // Convert string values to booleans
-      if (req.body.is_featured !== undefined) {
-        req.body.is_featured = convertStringToBoolean(req.body.is_featured);
-      }
-      if (req.body.feature_in_banner !== undefined) {
-        req.body.feature_in_banner = convertStringToBoolean(req.body.feature_in_banner);
-      }
+      convertBooleans(req.body);
 
       if (type == PARAM) {
         schema.parse(req.params);

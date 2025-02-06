@@ -19,7 +19,6 @@ export const verifyCustomer = asyncHandler(async (req: CustomRequest, res: Respo
   try {
     const decoded = verifyToken(token);
     const customer = await Customer.findById(decoded._id);
-    console.log(decoded);
     if (!customer) {
       return next(new ApiError(STATUS_CODES.UNAUTHORIZED, UNAUTHORIZED_ERROR));
     }

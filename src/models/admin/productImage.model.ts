@@ -7,21 +7,28 @@ interface IProductImage extends Document {
 }
 
 // Define the ProductImage schema
-const productImageSchema: Schema = new mongoose.Schema({
-  product: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Product',
-    required: true,
+const productImageSchema: Schema = new mongoose.Schema(
+  {
+    product: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Product",
+      required: true,
+    },
+    url: {
+      type: String,
+      required: true,
+    },
   },
-  url: {
-    type: String,
-    required: true,
-  },
-}, {
-  timestamps: true,
-});
+  {
+    timestamps: true,
+  }
+);
+
+// Ensure virtual fields are serialized
+productImageSchema.set("toObject", { virtuals: true });
+productImageSchema.set("toJSON", { virtuals: true });
 
 // Define the ProductImage model
-const ProductImage: Model<IProductImage> = mongoose.model<IProductImage>('ProductImage', productImageSchema);
+const ProductImage: Model<IProductImage> = mongoose.model<IProductImage>("ProductImage", productImageSchema);
 
 export default ProductImage;

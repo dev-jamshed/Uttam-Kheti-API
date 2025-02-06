@@ -24,7 +24,7 @@ const errorHandler = (err: ApiError | Error, req: Request, res: Response, next: 
     message,
     errors: errors.length ? errors : undefined,
 
-    // stack: process.env.NODE_ENV === "development" ? err.stack : undefined,
+    stack: err.stack,
   });
 };
 
