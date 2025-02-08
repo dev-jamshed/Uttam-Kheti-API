@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import ApiError from "../../utils/global/ApiError.util.js";
 import { STATUS_CODES } from "../../constants/global/statusCodes.constants.js";
-import { any, array } from "zod";
+
 
 const errorHandler = (err: ApiError | Error, req: Request, res: Response, next: NextFunction) => {
   let statusCode = STATUS_CODES.INTERNAL_SERVER_ERROR;
@@ -23,8 +23,7 @@ const errorHandler = (err: ApiError | Error, req: Request, res: Response, next: 
     statusCode,
     message,
     errors: errors.length ? errors : undefined,
-
-    stack: err.stack,
+    stack: statusCode >= STATUS_CODES.INTERNAL_SERVER_ERROR ? err.stack : undefined,
   });
 };
 

@@ -69,7 +69,7 @@ CustomerSchema.methods.generateAuthToken = function (): string {
   });
   return token;
 };
-
+export type { ICustomer };
 const Customer: Model<ICustomer> = mongoose.model<ICustomer>("Customer", CustomerSchema);
 
 export default Customer;

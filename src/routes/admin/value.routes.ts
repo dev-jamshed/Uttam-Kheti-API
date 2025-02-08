@@ -13,10 +13,10 @@ import { verifyAdmin } from "../../middlewares/admin/verifyAdmin.middleware.js";
 
 const router = express.Router();
 
-router.post("/",verifyAdmin, validate(createValueSchema), createValue);
+router.post("/", verifyAdmin, validate(createValueSchema), createValue);
 router.get("/", getValues);
 router.get("/:id", getValueById);
-router.put("/:id",verifyAdmin, validate(updateValueSchema), updateValue);
-router.delete("/:id", verifyAdmin,deleteValue);
+router.put("/:id", verifyAdmin, validate(updateValueSchema), updateValue);
+router.delete("/:id", verifyAdmin, deleteValue);
 
 export default router;

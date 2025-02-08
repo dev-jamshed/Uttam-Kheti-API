@@ -14,10 +14,10 @@ import { verifyAdmin } from "../../middlewares/admin/verifyAdmin.middleware.js";
 
 const router = express.Router();
 
-router.post("/",verifyAdmin, multerMiddleware.single("image"), validate(createBrandSchema), createBrand);
+router.post("/", verifyAdmin, multerMiddleware.single("image"), validate(createBrandSchema), createBrand);
 router.get("/", getBrands);
 router.get("/:id", getBrandById);
-router.put("/:id", verifyAdmin,multerMiddleware.single("image"), validate(updateBrandSchema), updateBrand);
-router.delete("/:id", verifyAdmin,deleteBrand);
+router.put("/:id", verifyAdmin, multerMiddleware.single("image"), validate(updateBrandSchema), updateBrand);
+router.delete("/:id", verifyAdmin, deleteBrand);
 
 export default router;

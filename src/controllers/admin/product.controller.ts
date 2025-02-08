@@ -19,7 +19,7 @@ import { convert } from "url-slug";
 import ProductImage from "../../models/admin/productImage.model.js";
 
 export const createProduct = asyncHandler(async (req: Request, res: Response) => {
-  const { name, description, category, brand, price, crossPrice, attributeValues } = req.body;
+  const { name, description, category, brand, price, crossPrice, attributeValues, track_qty, qty } = req.body;
 
   // Check if product with the same name already exists
   const existingProduct = await Product.findOne({ name });
@@ -49,7 +49,18 @@ export const createProduct = asyncHandler(async (req: Request, res: Response) =>
   // }
 
   const slug = convert(name);
-  const product = new Product({ name, description, category, brand, mainImage, slug, price, crossPrice });
+  const product = new Product({
+    name,
+    description,
+    category,
+    brand,
+    mainImage,
+    slug,
+    price,
+    crossPrice,
+    track_qty,
+    qty,
+  });
   await product.save();
 
   if (attributeValues && Array.isArray(attributeValues)) {
@@ -64,7 +75,7 @@ export const createProduct = asyncHandler(async (req: Request, res: Response) =>
 
   const fullProduct = await Product.findById(product._id)
     .populate("category", "name")
-    .select("name slug description category mainImage")
+    .select("name slug description category mainImage track_qty qty")
     .lean();
 
   if (!fullProduct) {
@@ -96,10 +107,10 @@ export const getProducts = asyncHandler(async (req: Request, res: Response) => {
     })
     .lean();
 
-  products.forEach(product => {
+  products.forEach((product) => {
     delete product.id;
     if (product.attributeValues) {
-      product.attributeValues.forEach(attributeValue => {
+      product.attributeValues.forEach((attributeValue) => {
         delete attributeValue.id;
         delete attributeValue.value_id.id;
         delete attributeValue.value_id.attribute_id.id;
@@ -137,7 +148,7 @@ export const getProductById = asyncHandler(async (req: Request, res: Response) =
 
   delete product.id;
   if (product.attributeValues) {
-    product.attributeValues.forEach(attributeValue => {
+    product.attributeValues.forEach((attributeValue) => {
       delete attributeValue.id;
       delete attributeValue.value_id.id;
       delete attributeValue.value_id.attribute_id.id;
@@ -149,7 +160,7 @@ export const getProductById = asyncHandler(async (req: Request, res: Response) =
 
 export const updateProduct = asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { name, description, category, brand, price, crossPrice, attributeValues } = req.body;
+  const { name, description, category, brand, price, crossPrice, attributeValues, track_qty, qty } = req.body;
 
   // Check if product with the same name already exists
   const existingProduct = await Product.findOne({ name, _id: { $ne: id } });
@@ -193,7 +204,7 @@ export const updateProduct = asyncHandler(async (req: Request, res: Response) =>
   const slug = convert(name);
   const updatedProduct = await Product.findByIdAndUpdate(
     id,
-    { name, description, category, brand, mainImage, slug, price, crossPrice },
+    { name, description, category, brand, mainImage, slug, price, crossPrice, track_qty, qty },
     { new: true }
   );
   if (!updatedProduct) {
@@ -213,7 +224,7 @@ export const updateProduct = asyncHandler(async (req: Request, res: Response) =>
 
   const fullProduct = await Product.findById(updatedProduct._id)
     .populate("category", "name")
-    .select("name slug description category mainImage")
+    .select("name slug description category mainImage track_qty qty")
     .lean();
 
   if (!fullProduct) {
@@ -240,4 +251,44 @@ export const deleteProduct = asyncHandler(async (req: Request, res: Response) =>
     await ProductImage.deleteOne({ _id: image._id });
   }
   sendResponse(res, STATUS_CODES.OK, DELETE_SUCCESS("Product"));
+});
+
+export const getProductsByIds = asyncHandler(async (req: Request, res: Response) => {
+  const { ids } = req.body; // Expecting an array of product IDs in the request body
+
+  if (!Array.isArray(ids) || ids.length === 0) {
+    throw new ApiError(STATUS_CODES.BAD_REQUEST, "Invalid or empty IDs array");
+  }
+
+  const products = await Product.find({ _id: { $in: ids } })
+    .populate("category", "name slug image")
+    .populate("brand", "name slug image")
+    .populate("productImages", "url")
+    .populate({
+      path: "attributeValues",
+      populate: {
+        path: "value_id",
+        model: "Value",
+        populate: {
+          path: "attribute_id",
+          model: "Attribute",
+          select: "name",
+        },
+        select: "name",
+      },
+    })
+    .lean();
+
+  products.forEach(product => {
+    delete product.id;
+    if (product.attributeValues) {
+      product.attributeValues.forEach(attributeValue => {
+        delete attributeValue.id;
+        delete attributeValue.value_id.id;
+        delete attributeValue.value_id.attribute_id.id;
+      });
+    }
+  });
+
+  sendResponse(res, STATUS_CODES.OK, GET_SUCCESS("Products"), products);
 });

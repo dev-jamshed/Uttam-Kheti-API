@@ -17,6 +17,8 @@ interface IProduct extends Document {
   mainImage: string;
   image?: string; // Add the image property
   attributeValues?: any[]; // Add the attributeValues property
+  track_qty: boolean;
+  qty?: number; // Add the qty property
 }
 
 // Define the Product schema
@@ -54,6 +56,16 @@ const productSchema: Schema = new mongoose.Schema(
     crossPrice: {
       type: Number,
       required: false,
+    },
+    track_qty: {
+      type: Boolean,
+      required: true,
+    },
+    qty: {
+      type: Number,
+      required: function (this: IProduct) {
+        return this.track_qty;
+      },
     },
   },
   {

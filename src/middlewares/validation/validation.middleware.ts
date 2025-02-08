@@ -1,7 +1,7 @@
 import ApiError from "../../utils/global/ApiError.util.js";
 import { PARAM, PARAM_AND_BODY } from "../../constants/global/app.constants.js";
 import { STATUS_CODES } from "../../constants/global/statusCodes.constants.js";
-import { Schema, ZodSchema } from "zod";
+import { ZodSchema } from "zod";
 import { Response, Request, NextFunction } from "express";
 
 const convertStringToBoolean = (value: any) => {
