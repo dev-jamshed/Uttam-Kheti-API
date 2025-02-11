@@ -1,35 +1,38 @@
-name: Deploy to EC2
+name: CI/CD Pipeline
 
 on:
   push:
     branches:
-      - master  # Jab bhi master branch pe push hoga, action chalega
+      - master
+  pull_request:
+    branches:
+      - master
 
 jobs:
-  deploy:
-    runs-on: self-hosted  # Tumhara EC2 runner isko execute karega
+  build:
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 18  # Tumhare project ka Node.js version
+          node-version: 18
+          cache: 'npm'
 
-      - name: Create .env File
-        run: |
-          echo "NODE_ENV=${{ secrets.NODE_ENV }}" > .env
-          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
-          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+      - name: Install Dependencies
+        run: npm install
 
-      - name: Install Dependencies & Build
-        run: |
-          npm install
-          npm run build
+      - name: Create .env file
+        run: echo "${{ secrets.ENV_FILE }}" > .env
 
-      - name: Restart Server with PM2
+      - name: Compile TypeScript
+        run: npm run build
+
+      - name: Start Server with PM2
         run: |
-          pm2 restart all || pm2 start dist/server.js --name "uttam-kheti-api"
-          pm2 save
+          npm install -g pm2
+          pm2 stop all || true
+          pm2 start dist/server.js --name uttam-kheti-api
