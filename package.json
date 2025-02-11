@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "node -r dotenv/config --experimental-json-modules ./dist/server.js",
+    "build": "tsc",
     "dev": "nodemon -r dotenv/config --experimental-json-modules ./dist/server.js",
     "format": "prettier --write ."
   },
